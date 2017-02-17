@@ -1,0 +1,86 @@
+#include <vector>
+#include <iostream>
+
+class Game
+{
+    public:
+        Game (int size_x, int size_y);
+
+        void spawn ();
+
+        void up ();
+        void down ();
+        void left ();
+        void right ();
+
+        void render ();
+
+        std::vector <std::vector <int>>& data ();
+        int& score ();
+
+    private:
+        std::vector <std::vector <int>> data_;
+
+        int score_;
+};
+
+Game::Game (int size_x, int size_y):
+    data_ (size_x, std::vector <int> (size_y)),
+    score_ (0)
+{
+}
+
+void Game::spawn ()
+{
+}
+
+void Game::up ()
+{
+}
+
+void Game::down ()
+{
+    for (int j = 0; j < data_[0].size (); j++)
+    {
+        for (int i = (int) data_.size () - 2; i >= 0; i--)
+        {
+        }
+    }
+}
+
+void Game::left ()
+{
+}
+
+void Game::right ()
+{
+}
+
+void Game::render ()
+{
+}
+
+std::vector <std::vector <int>>& Game::data ()
+{
+    return data_;
+}
+
+int& Game::score ()
+{
+    return score_;
+}
+
+int main ()
+{
+    Game data (4, 4);
+
+    for (int i = 0; i < data.data ().size (); i++)
+    {
+        for (int j = 0; j < data.data ()[i].size (); j++)
+            std::cout << data.data ()[i][j] << ' ';
+
+        std::cout << '\n';
+    }
+
+    return 0;
+}
