@@ -1,6 +1,0 @@
-class Game
-{
-    public:
-    private:
-        std::vector <std::vector <int>> data_;
-};

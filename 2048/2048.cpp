@@ -1,6 +1,9 @@
 #include <vector>
 #include <iostream>
 #include <ctime>
+#include <cstdlib>
+
+#include "TXLib.h"
 
 class Game
 {
@@ -47,19 +50,47 @@ void Game::spawn ()
 
 void Game::up ()
 {
+    for (int j = 0; j < data_[0].size (); j++)
+    {
+        for (int i = 0; i < (int) data_.size (); i++)
+        {
+            for (int t = i; t >= 1;)
+            {
+                if ((data_[t - 1][j] == data_[t][j]) || (data_[t - 1][j] == 0))
+                {
+                    data_[t - 1][j] += data_[t][j];
+
+                    data_[t][j] = 0;
+
+                    t--;
+                }
+
+                else
+                    break;
+            }
+        }
+    }
 }
 
 void Game::down ()
 {
     for (int j = 0; j < data_[0].size (); j++)
     {
-        for (int i = (int) data_.size () - 2; i >= 0; i--)
+        for (int i = (int) data_.size () - 1; i >= 0; i--)
         {
-            if ((data_[i + 1][j] == data_[i][j]) || (data_[i + 1][j] == 0))
+            for (int t = i; t < data_.size () - 1;)
             {
-                data_[i + 1][j] += data_[i][j];
+                if ((data_[t + 1][j] == data_[t][j]) || (data_[t + 1][j] == 0))
+                {
+                    data_[t + 1][j] += data_[t][j];
 
-                data_[i][j] = 0;
+                    data_[t][j] = 0;
+
+                    t++;
+                }
+
+                else
+                    break;
             }
         }
     }
@@ -67,10 +98,50 @@ void Game::down ()
 
 void Game::left ()
 {
+    for (int i = 0; i < data_.size (); i++)
+    {
+        for (int j = 0; j < data_[0].size (); j++)
+        {
+            for (int t = j; t >= 1;)
+            {
+                if ((data_[i][t - 1] == data_[i][t]) || (data_[i][t - 1] == 0))
+                {
+                    data_[i][t - 1] += data_[i][t];
+
+                    data_[i][t] = 0;
+
+                    t--;
+                }
+
+                else
+                    break;
+            }
+        }
+    }
 }
 
 void Game::right ()
 {
+    for (int i = 0; i < data_.size (); i++)
+    {
+        for (int j = (int) data_[0].size () - 1; j >= 0; j--)
+        {
+            for (int t = j; t < data_[0].size () - 1;)
+            {
+                if ((data_[i][t + 1] == data_[i][t]) || (data_[i][t + 1] == 0))
+                {
+                    data_[i][t + 1] += data_[i][t];
+
+                    data_[i][t] = 0;
+
+                    t++;
+                }
+
+                else
+                    break;
+            }
+        }
+    }
 }
 
 void Game::render ()
@@ -86,8 +157,6 @@ void Game::dump ()
 
         std::cout << '\n';
     }
-
-    std::cout << '\n';
 }
 
 std::vector <std::vector <int>>& Game::data ()
@@ -102,16 +171,34 @@ int& Game::score ()
 
 int main ()
 {
+    txCreateWindow (800, 600);
+
     Game data (4, 4);
 
-    for (int i = 0; i < 10; i++)
+    while (true)
+    {
         data.spawn ();
 
-    data.dump ();
+        system ("cls");
+        data.dump ();
 
-    data.down ();
+        for (bool flag = false; !flag;)
+        {
+            if (GetAsyncKeyState (VK_UP))
+                { data.up (); flag = true; }
 
-    data.dump ();
+            else if (GetAsyncKeyState (VK_DOWN))
+                { data.down (); flag = true; }
+
+            else if (GetAsyncKeyState (VK_LEFT))
+                { data.left (); flag = true; }
+
+            else if (GetAsyncKeyState (VK_RIGHT))
+                { data.right (); flag = true; }
+        }
+
+        txSleep (150);
+    }
 
     return 0;
 }
